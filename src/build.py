@@ -189,11 +189,11 @@ def presentResults (result):
     #print result
 
     if not result[0]:
-        print '\nERROR:', result[1]
+        print('\nERROR:', result[1])
         sys.stdout.flush()
         sys.exit(1)
     else:
-        print result
+        print(result)
 
     sys.exit(0)
 
@@ -203,13 +203,13 @@ def testimodel():
     except:
         return
 
-    print 'please remove file imodel.py or imodel.pyc from eTOXlab/src'
+    print('please remove file imodel.py or imodel.pyc from eTOXlab/src')
     sys.exit(1)
 
 def usage ():
     """Prints in the screen the command syntax and argument"""
     
-    print 'ERROR: build -e endpoint [-f filename.sdf][-m model.py][-v 1|last]'
+    print('ERROR: build -e endpoint [-f filename.sdf][-m model.py][-v 1|last]')
 
 def main ():
 

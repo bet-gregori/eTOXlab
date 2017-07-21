@@ -21,16 +21,16 @@
 ##    You should have received a copy of the GNU General Public License
 ##    along with eTOXlab.  If not, see <http://www.gnu.org/licenses/>.
     
-from Tkinter import *  # Importing the Tkinter (tool box) library 
-import Tkconstants
-import ttk
+from tkinter import *  # Importing the Tkinter (tool box) library 
+import tkinter.constants
+import tkinter.ttk
 
-import tkMessageBox
-import tkFileDialog
+import tkinter.messagebox
+import tkinter.filedialog
 import os
 import subprocess
 import shutil
-import Queue
+import queue
 
 from threading import Thread
 from utils import wkd
@@ -72,20 +72,20 @@ class manageLauncher:
         reqFile = ['--get=series', '--get=model', '--export']
                             
         if self.command in reqFile:
-            self.dest=tkFileDialog.askdirectory(initialdir='.',title="Choose a directory...")
+            self.dest=tkinter.filedialog.askdirectory(initialdir='.',title="Choose a directory...")
             if self.dest=='':
                 return
         elif self.command == '--import':
             importfile = self.gui.importTar.get()
 
             if importfile == None or importfile == '':
-                tkMessageBox.showerror("Error Message", "No suitable packed model selected")
+                tkinter.messagebox.showerror("Error Message", "No suitable packed model selected")
                 return
 
             endpoint = importfile[:-4]
             
             if os.path.isdir (wkd+'/'+endpoint.split('/')[-1]):
-                tkMessageBox.showerror("Error Message", "This endpoint already exists")
+                tkinter.messagebox.showerror("Error Message", "This endpoint already exists")
                 return
 
             self.gui.importTar.delete(0, END)
@@ -217,7 +217,7 @@ class viewLauncher:
         self.background  = (self.gui.viewBackgroundQuery.get() == '1')
 
         if self.molecules == None or self.molecules=='':
-            tkMessageBox.showerror("Error Message", "Enter a query series file")
+            tkinter.messagebox.showerror("Error Message", "Enter a query series file")
             return
 
         # Call new thread to visualize the series       
@@ -352,11 +352,11 @@ class buildLauncher:
                         if os.path.isfile(origDir+i):
                             shutil.copy(origDir+i,destDir)
                 except:
-                    tkMessageBox.showerror("Error Message", "Unable to copy series")
+                    tkinter.messagebox.showerror("Error Message", "Unable to copy series")
                     return
 
             if not os.path.isfile(destDir+'training.sdf'):
-                tkMessageBox.showerror("Error Message", "No series found")
+                tkinter.messagebox.showerror("Error Message", "No series found")
                 return
 
         # If 'model' starts with '<edited' the file imodel.py has been already copied. Else, copy it    
@@ -365,7 +365,7 @@ class buildLauncher:
                 try:
                     shutil.copy(self.model.selDir()+'/imodel.py',wkd+'/'+name+'/version0000/')
                 except:
-                    tkMessageBox.showerror("Error Message", "Unable to copy imodel.py")
+                    tkinter.messagebox.showerror("Error Message", "Unable to copy imodel.py")
                     return
         
         # Add argument to build list 
@@ -454,7 +454,7 @@ class predictLauncher:
         series  = self.gui.predictSeries.get()
 
         if series == '':
-            tkMessageBox.showerror("Error Message", "Please enter the name of the series")
+            tkinter.messagebox.showerror("Error Message", "Please enter the name of the series")
             return
 
         # Add argument to build list 

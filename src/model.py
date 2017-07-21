@@ -30,9 +30,9 @@ import os
 import sys
 import shutil
 import subprocess
-import cPickle as pickle
+import pickle as pickle
 import time
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import glob
 
 import matplotlib
@@ -44,7 +44,7 @@ import numpy as np
 from pls import pls
 from pca import pca
 from RF import RF
-from StringIO import StringIO
+from io import StringIO
 from utils import removefile
 from utils import randomName
 from utils import updateProgress
@@ -706,14 +706,14 @@ class model:
         params = "|".join(call)
         try:
             url = self.padelURL+params
-            req  = urllib2.Request(url)
-            resp = urllib2.urlopen(req)
+            req  = urllib.request.Request(url)
+            resp = urllib.request.urlopen(req)
             the_page = resp.read()
             #print the_page
             retcode = 0
-        except urllib2.HTTPError as e:
+        except urllib.error.HTTPError as e:
             return (False, 'PaDEL execution HTTPError' )
-        except urllib2.URLError as e:
+        except urllib.error.URLError as e:
             return (False, 'PaDEL execution URLError' )
         except:
             return (True, 'PaDEL execution error' )
@@ -818,7 +818,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        mi = suppl.next()
+        mi = next(suppl)
 
         if mi is None:
             return (False, 'wrong input format')
@@ -853,7 +853,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        mi = suppl.next()
+        mi = next(suppl)
 
         if mi is None:
             return (False, 'wrong input format')
@@ -862,7 +862,7 @@ class model:
         if self.MDexternalDict != None:
             if mi.HasProp (self.MDexternalID):
                 mID = mi.GetProp(self.MDexternalID)
-                if mID in self.MDexternalDict.keys():
+                if mID in list(self.MDexternalDict.keys()):
                     return (True, self.MDexternalDict[mID])
 
         # try to find within the SDFile
@@ -915,7 +915,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        mi = suppl.next()
+        mi = next(suppl)
 
         if mi is None:
             return (False, 'wrong input format')
@@ -956,7 +956,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        m = suppl.next()
+        m = next(suppl)
 
         if m is None:
             return (False, "wrong input format")
@@ -1103,7 +1103,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        mi = suppl.next()
+        mi = next(suppl)
         if mi is None:
             return (False, 'wrong input format')
 
@@ -1140,7 +1140,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        mi = suppl.next()
+        mi = next(suppl)
         if mi is None:
             return (False, 'wrong input format')
 
@@ -1184,7 +1184,7 @@ class model:
         except:
             return False
 
-        mori = supplOri.next()
+        mori = next(supplOri)
 
         if mori is None:
             return False
@@ -1622,7 +1622,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        mi = suppl.next()
+        mi = next(suppl)
 
         if mi is None:
             return (False, 'wrong input format')
@@ -1687,7 +1687,7 @@ class model:
         except:
             return (False, 'unable to open molfile')
 
-        mol = suppl.next()
+        mol = next(suppl)
         if mol is None:
             return (False, 'wrong input format')
 
@@ -1874,7 +1874,7 @@ class model:
                     X = model.excludeVar (X, res)
                     self.selVarMask = res
 
-                    print '\napplying previous FFD...'
+                    print('\napplying previous FFD...')
 
                     model.build (X,Y,self.modelLV,autoscale=self.modelAutoscaling)
 
@@ -1883,14 +1883,14 @@ class model:
                     for i in range (self.modelLV):
 ##                       print 'LV%2d R2:%5.3f Q2:%5.3f SDEP:%7.3f' % \
 ##                            (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i])
-                       print 'pred LV:%d R2:%5.3f Q2:%5.3f SDEP:%5.3f' % \
-                            (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i])
+                       print('pred LV:%d R2:%5.3f Q2:%5.3f SDEP:%5.3f' % \
+                            (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i]))
 
             while True:
                 if iRuns >= self.selVarRun :
                     break
 
-                print 'FFD var selection... (please be patient)'
+                print('FFD var selection... (please be patient)')
 
                 nobj,nvarx = np.shape (X)
                 if nobj < self.selVarLV: return None
@@ -1906,7 +1906,7 @@ class model:
                 iRuns += 1
                 resSet.append(res)
 
-                print '\n',nexcluded,' variables excluded'
+                print('\n',nexcluded,' variables excluded')
 
                 model.build (X,Y,self.modelLV,autoscale=self.modelAutoscaling)
 
@@ -1915,8 +1915,8 @@ class model:
                 for i in range (self.modelLV):
 ##                   print 'LV%2d R2:%5.3f Q2:%5.3f SDEP:%7.3f' % \
 ##                         (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i])
-                   print 'pred LV:%d R2:%5.3f Q2:%5.3f SDEP:%5.3f' % \
-                         (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i])
+                   print('pred LV:%d R2:%5.3f Q2:%5.3f SDEP:%5.3f' % \
+                         (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i]))
                 if not nexcluded :
                     # fake the rest of the runs by dumping the same mask (res) again and again
                     for i in range (self.selVarRun-iRuns):
@@ -1957,7 +1957,7 @@ class model:
             - text files with the recalculated and predicted results for all the objects and LV
         """
 
-        print 'cross-validating...'
+        print('cross-validating...')
 
         if self.selVar :
             model.X = model.excludeVar (model.X, self.selVarMask)
@@ -1967,8 +1967,8 @@ class model:
         for i in range (self.modelLV):
 ##            print 'LV%2d R2:%5.3f Q2:%5.3f SDEP:%7.3f' % \
 ##                  (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i])
-            print 'pred LV:%d R2:%5.3f Q2:%5.3f SDEP:%5.3f' % \
-                  (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i])
+            print('pred LV:%d R2:%5.3f Q2:%5.3f SDEP:%5.3f' % \
+                  (i+1,model.SSYac[i],model.Q2[i],model.SDEP[i]))
 
         self.infoResult = []
         self.infoResult.append( ('nobj',model.nobj) )
@@ -2053,11 +2053,11 @@ class model:
 
 ##            print "rec  LV:%-2d cutoff:%4.2f TP:%3d TN:%3d FP:%3d FN:%3d spec:%5.3f sens:%5.3f MCC:%5.3f" % (i+1,
 ##                    model.cutoff[i], model.TP[i], model.TN[i], model.FP[i], model.FN[i], spec, sens, mcc)
-            print "rec  LV:%-2d cutoff:%4.2f TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f" % (i+1,
-                    model.cutoff[i], model.TP[i], model.TN[i], model.FP[i], model.FN[i], spec, sens, mcc)
+            print("rec  LV:%-2d cutoff:%4.2f TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f" % (i+1,
+                    model.cutoff[i], model.TP[i], model.TN[i], model.FP[i], model.FN[i], spec, sens, mcc))
 
 
-        print 'cross-validating...'
+        print('cross-validating...')
         yp = model.predConfussion()
 
         for i in range (self.modelLV):
@@ -2067,8 +2067,8 @@ class model:
 
 ##            print "pred LV:%-2d cutoff:%4.2f TP:%3d TN:%3d FP:%3d FN:%3d spec:%5.3f sens:%5.3f MCC:%5.3f" % (i+1,
 ##                    model.cutoff[i], model.TPpred[i], model.TNpred[i], model.FPpred[i], model.FNpred[i], specp, sensp, mccp)
-            print "pred LV:%-2d cutoff:%4.2f TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f" % (i+1,
-                    model.cutoff[i], model.TPpred[i], model.TNpred[i], model.FPpred[i], model.FNpred[i], specp, sensp, mccp)
+            print("pred LV:%-2d cutoff:%4.2f TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f" % (i+1,
+                    model.cutoff[i], model.TPpred[i], model.TNpred[i], model.FPpred[i], model.FNpred[i], specp, sensp, mccp))
 
         self.infoResult = []
         self.infoResult.append( ('nobj',model.nobj) )
@@ -2131,7 +2131,7 @@ class model:
             plt.plot(Y, Yp,"ro")
             fig1.savefig("./external-validation.png", format='png')
         except:
-            print "Error creating Predicted vs Experimental Ext Validation graph"
+            print("Error creating Predicted vs Experimental Ext Validation graph")
 
         f = open ('./external-validation.txt','w')
         for i in range (len(Y)):
@@ -2194,7 +2194,7 @@ class model:
         try:
             FourfoldDisplay(TP,TN,FP,FN, 'Predicted', 'external-validation_confusion_matrix.png','.')
         except:
-            print "Failed to generate Ext validation graph"
+            print("Failed to generate Ext validation graph")
 
         f = open ('./external-validation.txt','w')
         for i in range (len(Y)): 
@@ -2834,7 +2834,7 @@ class model:
 
             self.setSeries (molecules, nmol)
 
-            print (molecules, nmol)  # DEBUG ONLY. REMOVE!!!!
+            print((molecules, nmol))  # DEBUG ONLY. REMOVE!!!!
 
             if self.MD == 'external':
                 ## the external MD table must be copied to the local model directory
@@ -2984,7 +2984,7 @@ class model:
                 if extValid:
                     try:
                         suppl = Chem.SDMolSupplier(molFile)
-                        origY = self.getBio(suppl.next())
+                        origY = self.getBio(next(suppl))
                         orig.append (origY)
                     except:
                         pass

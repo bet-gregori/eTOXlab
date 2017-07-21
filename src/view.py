@@ -87,12 +87,12 @@ def presentResults (result):
     """
 
     if not result[0]:
-        print '\nERROR:', result[1]
+        print('\nERROR:', result[1])
         sys.stdout.flush()
         sys.exit(1)
         
     for i in result[1]:
-        print i
+        print(i)
 
     sys.exit(0)
 
@@ -100,7 +100,7 @@ def presentResults (result):
 def usage ():
     """Prints in the screen the command syntax and argument"""
     
-    print 'view -e endpoint [-f filename.sdf][-v 1|last][--type=pca|property][--background][--refname=refname][--refver=0]'
+    print('view -e endpoint [-f filename.sdf][-v 1|last][--type=pca|property][--background][--refname=refname][--refver=0]')
 
 def main ():
 
@@ -165,12 +165,12 @@ def main ():
         sys.exit (1)
 
     if vtype not in [None, 'pca','property', 'project', 'model']:
-        print '+',property,'+'
+        print('+',property,'+')
         usage()
         sys.exit (1)
 
     if vtype == 'project' and (refname == None and mol == None):
-        print 'project view type requires to define the reference endpoint name'
+        print('project view type requires to define the reference endpoint name')
         usage()
         sys.exit (1)
 

@@ -1,0 +1,6 @@
+mkdir updatetopy3
+for f in *py;
+ do
+   2to3 -w $f 1> updatetopy3/$f.out 2> updatetopy3/$f.err;
+ done
+mv *bak updatetopy3

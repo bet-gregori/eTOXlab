@@ -21,16 +21,16 @@
 ##    You should have received a copy of the GNU General Public License
 ##    along with eTOXlab.  If not, see <http://www.gnu.org/licenses/>.
     
-from Tkinter import *  # Importing the Tkinter (tool box) library 
-import Tkconstants
-import ttk
+from tkinter import *  # Importing the Tkinter (tool box) library 
+import tkinter.constants
+import tkinter.ttk
 
-import tkMessageBox
-import tkFileDialog
+import tkinter.messagebox
+import tkinter.filedialog
 import os
 import subprocess
 import shutil
-import Queue
+import queue
 from rdkit import Chem
 
 from threading import Thread
@@ -127,7 +127,7 @@ class visualizewindow(Toplevel):
         
         f = Frame(self)
         self.i = ImageTk.PhotoImage(Image.open(fname))
-        ttk.Label(f,image=self.i).pack()        
+        tkinter.ttk.Label(f,image=self.i).pack()        
         f.pack()
 
     def viewMultiple (self, fnames):
@@ -136,7 +136,7 @@ class visualizewindow(Toplevel):
             self.destroy()
             return
         
-        self.note_view = ttk.Notebook(self)
+        self.note_view = tkinter.ttk.Notebook(self)
         self.note_view.pack()
 
         self.i=[]
@@ -146,7 +146,7 @@ class visualizewindow(Toplevel):
             
             f = Frame(self)
             self.note_view.add(f,text=os.path.splitext(os.path.basename(t))[0])
-            ttk.Label(f,image=self.i[-1]).pack()
+            tkinter.ttk.Label(f,image=self.i[-1]).pack()
 
         if not len(self.i):
             self.destroy()
@@ -168,8 +168,8 @@ class visualizePrediction (Toplevel):
         self.title ('Prediction results')
 
         f0 = Frame (self)
-        scrollbar_tree = ttk.Scrollbar(f0)
-        self.tree = ttk.Treeview (f0, columns = ('m','a','b','c'), selectmode='browse',yscrollcommand = scrollbar_tree.set)
+        scrollbar_tree = tkinter.ttk.Scrollbar(f0)
+        self.tree = tkinter.ttk.Treeview (f0, columns = ('m','a','b','c'), selectmode='browse',yscrollcommand = scrollbar_tree.set)
         self.tree.column ("m", width=120, anchor='w' )
         self.tree.column ('a', width=120, anchor='e')
         self.tree.column ('b', width=50, anchor='center')
@@ -200,7 +200,7 @@ class visualizePrediction (Toplevel):
         if self.tree.parent(sel) != '':
             sel = self.tree.parent(sel)
 
-        f = tkFileDialog.asksaveasfile(parent=self, filetypes=( ('CSV file', '*.csv'), ("All files", "*.*")) )
+        f = tkinter.filedialog.asksaveasfile(parent=self, filetypes=( ('CSV file', '*.csv'), ("All files", "*.*")) )
         
         for i in self.tree.get_children(sel):
             line = self.tree.set(i,'m')+'\t' + self.tree.set(i,'a')+'\t'+ self.tree.set(i,'b')+'\t'+self.tree.set(i,'c')
@@ -215,14 +215,14 @@ class visualizePrediction (Toplevel):
         if self.tree.parent(sel) != '':
             sel = self.tree.parent(sel)
 
-        f = tkFileDialog.asksaveasfile(parent=self, filetypes=( ('SDFile', '*.sdf'), ("All files", "*.*")) )
+        f = tkinter.filedialog.asksaveasfile(parent=self, filetypes=( ('SDFile', '*.sdf'), ("All files", "*.*")) )
 
         sdf = sel.split(':')[2]
         suppl=Chem.SDMolSupplier(sdf)
 
         for i in self.tree.get_children(sel):
             try:
-                mi = suppl.next()
+                mi = next(suppl)
             except:
                 continue
             mb = Chem.MolToMolBlock(mi)
@@ -248,7 +248,7 @@ class visualizePrediction (Toplevel):
         try:
             f = open ('/var/tmp/results.txt','r')
         except:
-            tkMessageBox.showerror("Error Message", 'no result generated')
+            tkinter.messagebox.showerror("Error Message", 'no result generated')
             return
 
         # get molecule names from supplied SDFile
@@ -262,7 +262,7 @@ class visualizePrediction (Toplevel):
             name = 'mol%0.4d'%count
             
             try:
-                mi = suppl.next()
+                mi = next(suppl)
             except:
                 break
             
@@ -286,7 +286,7 @@ class visualizePrediction (Toplevel):
             result = line.split('\t')
 
             if result[0]=='0' and 'ERROR:' in result[1]:
-                tkMessageBox.showerror("Error Message", result[1])
+                tkinter.messagebox.showerror("Error Message", result[1])
                 f.close()
                 return
 

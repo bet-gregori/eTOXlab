@@ -53,7 +53,7 @@ def licenseTest (endpoint, verID):
 def usage ():
     """Prints in the screen the command syntax and argument"""
     
-    print 'ERROR: licensetest -e endpoint [-v 1|last]'
+    print('ERROR: licensetest -e endpoint [-v 1|last]')
 
 
 def ltest (endpoint):
@@ -94,8 +94,8 @@ def ltest (endpoint):
         if os.path.isfile (vdir+'/licensing-status.txt'):
             shutil.copy(vdir+'/licensing-status.txt',edir)
             
-            os.chmod(vdir+'/licensing-status.txt',0664)
-            os.chmod(edir+'/licensing-status.txt',0664)
+            os.chmod(vdir+'/licensing-status.txt',0o664)
+            os.chmod(edir+'/licensing-status.txt',0o664)
             
     f.close()
         
@@ -141,7 +141,7 @@ def main ():
 
     result=licenseTest (endpoint,ver)
 
-    print endpoint+'\t'+str(ver)+':', result
+    print(endpoint+'\t'+str(ver)+':', result)
 
     sys.exit(0)
         

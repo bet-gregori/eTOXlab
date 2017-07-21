@@ -254,14 +254,14 @@ class RF:
         #print self.estimators
 
         if self.quantitative:
-            print "Building Quantitative RF model"
+            print("Building Quantitative RF model")
             self.clf = RandomForestRegressor(n_estimators = int(self.estimators),
                                             warm_start=False,
                                             max_features=self.features,
                                             oob_score=True,
                                             random_state=RANDOM_STATE)
         else:
-            print "Building Qualitative RF_model"
+            print("Building Qualitative RF_model")
             self.clf = RandomForestClassifier(n_estimators = int(self.estimators),
                                             warm_start=False,
                                             max_features=self.features,
@@ -271,7 +271,7 @@ class RF:
 
         self.clf.fit(self.X, self.Y)
         
-        print 'Building Learning Curves'
+        print('Building Learning Curves')
         if self.learning_curve:
             title = "Learning Curves (RF)"
             # SVC is more expensive so we do a lower number of CV iterations:
@@ -321,9 +321,9 @@ class RF:
             self.R2   = 1.00 - (SSY/SSY0)
             self.OOBe = 1.00 - self.clf.oob_score_
 
-            print "Recalculated results"
-            print 'rec R2:%5.3f SDEC:%5.3f OOB_error:%5.3f neg_mean_squared_error:%5.3f' % \
-                  (self.R2,self.SDEC,self.OOBe, self.scoringR)
+            print("Recalculated results")
+            print('rec R2:%5.3f SDEC:%5.3f OOB_error:%5.3f neg_mean_squared_error:%5.3f' % \
+                  (self.R2,self.SDEC,self.OOBe, self.scoringR))
 
             
             scoring = 'neg_mean_squared_error'
@@ -339,9 +339,9 @@ class RF:
             self.Q2   = 1.00 - (SSY_out/SSY0_out)
             # OOBe_loo  = 1.00 - np.mean(OOB_errors)
 
-            print str(self.cv)+" cross-validation results"
-            print 'pred R2:%5.3f Q2:%5.3f SDEP:%5.3f neg_mean_squared_error:%5.3f' % \
-                  (self.R2,self.Q2,self.SDEP, self.scoringP)
+            print(str(self.cv)+" cross-validation results")
+            print('pred R2:%5.3f Q2:%5.3f SDEP:%5.3f neg_mean_squared_error:%5.3f' % \
+                  (self.R2,self.Q2,self.SDEP, self.scoringP))
 
 
             # Automated cross-validation loo scikitlearn
@@ -367,7 +367,7 @@ class RF:
                 fig1.savefig(self.vpath+"/RF-recalculated.png", format='png')
                 fig1.savefig("./RF-recalculated.png", format='png')
             except:
-                print "Error creating Recalculated vs Experimental RF model graph"
+                print("Error creating Recalculated vs Experimental RF model graph")
 
             try:
                 fig1=plt.figure()
@@ -378,7 +378,7 @@ class RF:
                 fig1.savefig(self.vpath+"/RF-predicted.png", format='png')
                 fig1.savefig("./RF-predicted.png", format='png')
             except:
-                print "Error creating Predicted vs Experimental RF model graph"
+                print("Error creating Predicted vs Experimental RF model graph")
 
 
            # File with experimental, recalculated and cv predictions values.
@@ -424,12 +424,12 @@ class RF:
 
             self.OOBe = 1.00 - self.clf.oob_score_
 
-            print "Recalculated results"
-            print "rec  TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f OOB_error:%5.3f f1_score:%5.3f" % \
-                  (TP, TN, FP, FN, spec, sens, mcc, self.OOBe, f1 )
+            print("Recalculated results")
+            print("rec  TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f OOB_error:%5.3f f1_score:%5.3f" % \
+                  (TP, TN, FP, FN, spec, sens, mcc, self.OOBe, f1 ))
 
             # Leave-one-out Cross validation
-            print 'Cross validating RF....'
+            print('Cross validating RF....')
             scoring = 'f1'
 
             y_pred = cross_val_predict(self.clf, X, Y, cv=self.cv)
@@ -464,9 +464,9 @@ class RF:
             mcc_cv  = MCC (TPo, TNo, FPo, FNo)
             f1_cv = f1_score(Y, y_pred, pos_label=1, average='binary')
 
-            print str(self.cv)+" cross-validation results"
-            print "pred  TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f f1_score:%5.3f" % \
-                  (TPo, TNo, FPo, FNo, spec_cv, sens_cv, mcc_cv, f1_cv )
+            print(str(self.cv)+" cross-validation results")
+            print("pred  TP:%d TN:%d FP:%d FN:%d spec:%5.3f sens:%5.3f MCC:%5.3f f1_score:%5.3f" % \
+                  (TPo, TNo, FPo, FNo, spec_cv, sens_cv, mcc_cv, f1_cv ))
 
             # Create Graphs
 
@@ -478,13 +478,13 @@ class RF:
             try:
                 FourfoldDisplay(TPo,TNo,FPo,FNo, 'RFC Predicted', 'RF_predicted_confusion_matrix.png' , self.vpath)
             except:
-                print "Failed to generate RF predicted validation graph"
+                print("Failed to generate RF predicted validation graph")
 
             # Recalculated confusion matrix graph
             try:
                 FourfoldDisplay(TP,TN,FP,FN, 'RFC Recalculated', 'RF_recalculated_confusion_matrix.png' , self.vpath)
             except:
-                print "Failed to generate RF recalculated validation graph"
+                print("Failed to generate RF recalculated validation graph")
 
         return (Yp)
 
@@ -494,7 +494,7 @@ class RF:
         """
 
         if self.clf == None:
-            print 'failed to load clasifier'
+            print('failed to load clasifier')
             return
 
         if self.autoscale:
@@ -546,7 +546,7 @@ class RF:
 
         num_steps = int((max_estimators-min_estimators)/stp_estimators)
 
-        print 'optimizing RF....'
+        print('optimizing RF....')
         updateProgress (0.0)
 
         optValue = 1.0e10
@@ -571,7 +571,7 @@ class RF:
             j=j+1
 
         for ie in errors:
-            xs, ys = zip (*errors[ie])
+            xs, ys = list(zip (*errors[ie]))
             plt.plot(xs, ys, label=ie)
 
         plt.xlim(min_estimators, max_estimators)
@@ -583,7 +583,7 @@ class RF:
         plt.savefig(self.vpath+"/rf-OOB-parameter-tuning.png")
         plt.savefig("./rf-OOB-parameter-tuning.png")
 
-        print 'optimum features:', optFeatures, 'optimum estimators:', optEstimators, 'best OOB:', optValue
+        print('optimum features:', optFeatures, 'optimum estimators:', optEstimators, 'best OOB:', optValue)
 
         return (optEstimators, optFeatures)
 

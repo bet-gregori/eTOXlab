@@ -25,7 +25,7 @@
 import sys
 import os
 import getopt
-import cPickle as pickle
+import pickle as pickle
 
 from utils import lastVersion
 from utils import exposedVersion
@@ -84,16 +84,16 @@ def presentPredictionText (pred):
                 for y in x[1]:
                     if y[0]:
                         if isinstance(y[1], float):
-                            print "%8.5f" % y[1],
+                            print("%8.5f" % y[1], end=' ')
                         else:
-                            print y[1],
+                            print(y[1], end=' ')
                     else:
-                        print y,
-                print
+                        print(y, end=' ')
+                print()
             else:
-                print x
+                print(x)
     else:
-        print pred
+        print(pred)
 
 def presentPredictionWS2 (pred, output):
     
@@ -191,14 +191,14 @@ def testimodel():
     except:
         return
 
-    print 'please remove file imodel.py or imodel.pyc from eTOXlab/src'
+    print('please remove file imodel.py or imodel.pyc from eTOXlab/src')
     sys.exit(1)
 
     
 def usage ():
     """Prints in the screen the command syntax and argument"""
     
-    print 'predict -e endpoint [-f filename.sdf][-v 1|last][-x]'
+    print('predict -e endpoint [-f filename.sdf][-v 1|last][-x]')
 
 
 def main ():

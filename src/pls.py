@@ -446,7 +446,7 @@ class pls:
 
             if gui : updateProgress (float(i)/float(nobj))
 
-        if gui : print
+        if gui : print()
         
         self.SSY  = SSY        
         self.SDEP = [np.sqrt(i/nobj) for i in SSY]
@@ -928,14 +928,14 @@ if __name__ == "__main__":
 
         # everything complete, print the results
         for a in range (mypls.Am):
-            print "SSXex %6.4f SSXac %6.4f " % \
-                  (mypls.SSXex[a], mypls.SSXac[a]),
-            print "SSYex %6.4f SSYac %6.4f SDEC %6.4f" % \
-                  (mypls.SSYex[a], mypls.SSYac[a], mypls.SDEC[a])
+            print("SSXex %6.4f SSXac %6.4f " % \
+                  (mypls.SSXex[a], mypls.SSXac[a]), end=' ')
+            print("SSYex %6.4f SSYac %6.4f SDEC %6.4f" % \
+                  (mypls.SSYex[a], mypls.SSYac[a], mypls.SDEC[a]))
          
         for a in range (mypls.Av):
-            print 'A:%2d  SSY: %6.4f Q2: %6.4f SDEP: %6.4f' % \
-                  (a+1,mypls.SSY[a],mypls.Q2[a],mypls.SDEP[a])
+            print('A:%2d  SSY: %6.4f Q2: %6.4f SDEP: %6.4f' % \
+                  (a+1,mypls.SSY[a],mypls.Q2[a],mypls.SDEP[a]))
             
     elif testType == 'FFD' :
 
@@ -955,13 +955,13 @@ if __name__ == "__main__":
                 res, nexcluded = mypls.varSelectionFFD(X,Y,2,autoscale=Auto)
                 X              = mypls.excludeVar(X,res)
 
-                print '\n', nexcluded, ' var excluded'
+                print('\n', nexcluded, ' var excluded')
 
                 mypls.build(X,Y,targetA=5,autoscale=Auto)
                 mypls.validateLOO(5, gui=False)
                 for a in range (mypls.Av):
-                    print 'A:%2d  SSY: %6.4f Q2: %6.4f SDEP: %6.4f' % \
-                          (a+1,mypls.SSY[a],mypls.Q2[a],mypls.SDEP[a])
+                    print('A:%2d  SSY: %6.4f Q2: %6.4f SDEP: %6.4f' % \
+                          (a+1,mypls.SSY[a],mypls.Q2[a],mypls.SDEP[a]))
                 
                 if (nexcluded==0)     : break
                                 

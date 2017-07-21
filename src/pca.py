@@ -284,8 +284,8 @@ if __name__ == "__main__":
     mypca.saveModel('modelPCA.npy')
 
     for a in range (mypca.A):
-        print "SSXex %6.4f SSXac %6.4f " % \
-              (mypca.SSXex[a]/mypca.SSX, mypca.SSXac[a]/mypca.SSX)
+        print("SSXex %6.4f SSXac %6.4f " % \
+              (mypca.SSXex[a]/mypca.SSX, mypca.SSXac[a]/mypca.SSX))
 
     # reloads the data
     X = readData ('test01.dat')
@@ -300,6 +300,6 @@ if __name__ == "__main__":
         success, result = pca2.projectPC(X,i)
         if success:
             X, t, dmodx = result
-            print t
+            print(t)
         else:
-            print result
+            print(result)

@@ -27,7 +27,7 @@ import string
 import random
 import time
 import subprocess
-import cPickle as pickle
+import pickle as pickle
 
 
 VERSION = '0.9.7'
@@ -327,7 +327,7 @@ def writeError (error, verbose=False):
     """Print an error message"""
 
     if verbose:
-        print error
+        print(error)
         
     try:
         f=open('./error.log','a+')

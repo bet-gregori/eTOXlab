@@ -21,16 +21,16 @@
 ##    You should have received a copy of the GNU General Public License
 ##    along with eTOXlab.  If not, see <http://www.gnu.org/licenses/>.
     
-from Tkinter import *  # Importing the Tkinter (tool box) library 
-import Tkconstants
-import ttk
+from tkinter import *  # Importing the Tkinter (tool box) library 
+import tkinter.constants
+import tkinter.ttk
 
-import tkMessageBox
-import tkFileDialog
+import tkinter.messagebox
+import tkinter.filedialog
 import os
 import signal
 import shutil
-import Queue
+import queue
 import re
 import fcntl
 
@@ -53,13 +53,13 @@ from etoxlab_viewers import *
 '''
 Creates a TreeView to shows general information about the existing models
 '''
-class modelViewer (ttk.Treeview):
+class modelViewer (tkinter.ttk.Treeview):
 
     def __init__(self, parent):
               
-        scrollbar_tree = ttk.Scrollbar(root)
+        scrollbar_tree = tkinter.ttk.Scrollbar(root)
         
-        self.tree=ttk.Treeview.__init__(self, parent, columns = ('a','b','c','d','e'),
+        self.tree=tkinter.ttk.Treeview.__init__(self, parent, columns = ('a','b','c','d','e'),
                                         selectmode='browse', yscrollcommand = scrollbar_tree.set)
                
         self.column("#0",minwidth=0,width=150, stretch=NO)
@@ -276,7 +276,7 @@ class etoxlab:
 
     def __init__(self, master):
         self.seeds  = []
-        self.q      = Queue.Queue()
+        self.q      = queue.Queue()
         self.master = master
         self.myfont = 'Courier New'
         self.skipUpdate = False
@@ -307,13 +307,13 @@ class etoxlab:
         self.models.bind('<<TreeviewSelect>>', self.selectionChanged)
      
         # Main container is a Notebook
-        n = ttk.Notebook (i2)
+        n = tkinter.ttk.Notebook (i2)
         f1 = Frame(n)
         f2 = Frame(n)
         f3 = Frame(n)
         f4 = Frame(n)
 
-        self.pb = ttk.Progressbar(i2, orient='horizontal', mode='indeterminate', value=0)
+        self.pb = tkinter.ttk.Progressbar(i2, orient='horizontal', mode='indeterminate', value=0)
         
         f1.pack(side="top", fill='x', expand=False)
         f2.pack(side="top", fill='x', expand=False)
@@ -505,7 +505,7 @@ class etoxlab:
         # frame 0: combo-box for seletig view type
         Label (fview0, width = 10, anchor='e', text='type').pack(side='left')
         self.viewTypeCombo = StringVar()
-        self.cboCombo = ttk.Combobox(fview0, values=('pca','property','project','model'),
+        self.cboCombo = tkinter.ttk.Combobox(fview0, values=('pca','property','project','model'),
                                      textvariable=self.viewTypeCombo, state='readonly')
         
         self.cboCombo.current(0)
@@ -516,7 +516,7 @@ class etoxlab:
         self.referEndpointCombo = StringVar ()
         comboValues=("None",) + self.models.get_children()
            
-        self.eview1 = ttk.Combobox(fview1, values=comboValues, textvariable=self.referEndpointCombo, state='readonly')
+        self.eview1 = tkinter.ttk.Combobox(fview1, values=comboValues, textvariable=self.referEndpointCombo, state='readonly')
         self.eview1.current(0)
         self.eview1.pack()
 
@@ -528,7 +528,7 @@ class etoxlab:
         for i in range(self.models.maxver):
             comboVersions=comboVersions+(str(i),)  # this is updated by updateGUI method
            
-        self.eview2 = ttk.Combobox(fview2, values=comboVersions, textvariable=self.referVersionCombo, state='readonly')
+        self.eview2 = tkinter.ttk.Combobox(fview2, values=comboVersions, textvariable=self.referVersionCombo, state='readonly')
         self.eview2.current(0)
         self.eview2.pack()
 
@@ -538,7 +538,7 @@ class etoxlab:
         # frame 3: check button for showing background
         Label(fview3, width = 10, anchor='e', text='   ').pack(side='left')
         self.viewBackground = StringVar()
-        self.checkBackground = ttk.Checkbutton(fview3, text='show background', variable=self.viewBackground, command = lambda: self.updateBack(True))
+        self.checkBackground = tkinter.ttk.Checkbutton(fview3, text='show background', variable=self.viewBackground, command = lambda: self.updateBack(True))
         
         self.viewBackground.set(0)
         self.checkBackground.pack()
@@ -569,7 +569,7 @@ class etoxlab:
         # frame 0: combo-box for selecting view type
         Label (fviewQuery0, width = 10, anchor='e', text='type').pack(side='left')
         self.viewTypeComboQuery = StringVar()
-        self.cboComboQuery = ttk.Combobox( fviewQuery0, values=('pca','property','project'), textvariable=self.viewTypeComboQuery, state='readonly')
+        self.cboComboQuery = tkinter.ttk.Combobox( fviewQuery0, values=('pca','property','project'), textvariable=self.viewTypeComboQuery, state='readonly')
         self.cboComboQuery.current(0)
         self.cboComboQuery.pack(anchor ='w')
 
@@ -582,7 +582,7 @@ class etoxlab:
         # frame 2: check button for showing background
         Label (fviewQuery2, width = 10, anchor='e', text='   ').pack(side='left')
         self.viewBackgroundQuery = StringVar()
-        self.checkBackgroundQuery = ttk.Checkbutton(fviewQuery2, text='show background', variable=self.viewBackgroundQuery)
+        self.checkBackgroundQuery = tkinter.ttk.Checkbutton(fviewQuery2, text='show background', variable=self.viewBackgroundQuery)
         self.viewBackgroundQuery.set(0)
         self.checkBackgroundQuery.pack(anchor='w')
 
@@ -664,7 +664,7 @@ class etoxlab:
             self.eview2.current(0)
 
     def selectFile (self, myEntry, myType):
-        selection=tkFileDialog.askopenfilename(parent=root, filetypes=( myType, ("All files", "*.*")) )
+        selection=tkinter.filedialog.askopenfilename(parent=root, filetypes=( myType, ("All files", "*.*")) )
         if selection:
             myEntry.delete(0, END)
             myEntry.insert(0,selection)
@@ -680,7 +680,7 @@ class etoxlab:
             try:
                 shutil.copy(vdir+'imodel.py', zdir)   # copy imodel.py to the sandbox. This will be the base version for build 
             except:
-                tkMessageBox.showerror("Error Message", "Unable to access source imodel.py")
+                tkinter.messagebox.showerror("Error Message", "Unable to access source imodel.py")
                 return
 
             removefile (zdir+'info.pkl')  # remove imodel.py from the sandbox to force model rebuilding
@@ -693,7 +693,7 @@ class etoxlab:
         try:
             subprocess.Popen(['/usr/bin/idle',zdir+'imodel.py'])
         except:
-            tkMessageBox.showerror("Error Message", "Unable to edit imodel.py")
+            tkinter.messagebox.showerror("Error Message", "Unable to edit imodel.py")
             pass
             
         self.buildModel.delete(0, END)
@@ -766,24 +766,24 @@ class etoxlab:
         tag = self.enew2.get()
                 
         if not endpoint:
-            tkMessageBox.showerror("Error Message", "Please enter the name of the endpoint")
+            tkinter.messagebox.showerror("Error Message", "Please enter the name of the endpoint")
             return
 
         elif not tag:
-            tkMessageBox.showerror("Error Message", "Please enter the name of the tag")
+            tkinter.messagebox.showerror("Error Message", "Please enter the name of the tag")
             return
 
         #tag format imposed by API2
         p = re.compile('^(/[^/]+)+/\\d+$')
         if not p.match(tag):
-            tkMessageBox.showerror("Error Message", 'Valid tags must have a format like this:\n"/toxicity type/endpoint name/3"')
+            tkinter.messagebox.showerror("Error Message", 'Valid tags must have a format like this:\n"/toxicity type/endpoint name/3"')
             return
 
         for line in self.models.get_children():
             labels = line.split()
             
             if endpoint == labels[0]:
-                tkMessageBox.showerror("Error Message", "This endpoint already exists!")
+                tkinter.messagebox.showerror("Error Message", "This endpoint already exists!")
                 return
 
         try:
@@ -802,7 +802,7 @@ class etoxlab:
 
         self.updateGUI(True)
         
-        tkMessageBox.showinfo("Info Message",'New endpoint created')    
+        tkinter.messagebox.showinfo("Info Message",'New endpoint created')    
 
 
     '''
@@ -811,7 +811,7 @@ class etoxlab:
     def kill(self):    
         name = self.models.selEndpoint()
 
-        if not tkMessageBox.askyesno('Verify', 'Do you really want to remove '
+        if not tkinter.messagebox.askyesno('Verify', 'Do you really want to remove '
                                      'the whole endpoint '+name+' and all '
                                      'associated models?'):
             return
@@ -829,7 +829,7 @@ class etoxlab:
 
         self.updateGUI()
         
-        tkMessageBox.showinfo("Info Message",'Endpoint '+name+' removed')  
+        tkinter.messagebox.showinfo("Info Message",'Endpoint '+name+' removed')  
 
     '''
     Presents information about the model defined by the endpoint
@@ -846,7 +846,7 @@ class etoxlab:
             process = subprocess.Popen(mycommand, stdout=subprocess.PIPE)
             output, err = process.communicate()
         except:
-            tkMessageBox.showerror("Error Message", "Unable to obtain information")
+            tkinter.messagebox.showerror("Error Message", "Unable to obtain information")
             return
 
         outputlist = output.split('\n')
@@ -875,7 +875,7 @@ class etoxlab:
 
                     self.removeBackgroundProcess()
                     
-                    tkMessageBox.showinfo("Info Message", msg)
+                    tkinter.messagebox.showinfo("Info Message", msg)
 
                     
                 ## post BUILDING OK
@@ -897,7 +897,7 @@ class etoxlab:
                     #self.pb.stop()
                     self.removeBackgroundProcess()
                     
-                    tkMessageBox.showinfo("Info Message", msg)
+                    tkinter.messagebox.showinfo("Info Message", msg)
 
                 ## post VIEWING OK
                 elif 'View completed OK' in msg:
@@ -913,7 +913,7 @@ class etoxlab:
                     
                     if len(msglist)<3:
 
-                        tkMessageBox.showerror("Error Message",'Abnormal termination')
+                        tkinter.messagebox.showerror("Error Message",'Abnormal termination')
                         
                     else:                                        
                         self.win=visualizewindow('series: '+msglist[0]+' ver '+msglist[1])
@@ -929,11 +929,11 @@ class etoxlab:
                     msglist = msg.split()[3:]
                     
                     if len(msglist)<3:
-                        tkMessageBox.showerror("Error Message",'Abnormal termination')
+                        tkinter.messagebox.showerror("Error Message",'Abnormal termination')
                       
                     elif not os.path.isfile('/var/tmp/results.txt'):
                         
-                        tkMessageBox.showerror("Error Message",'Results not found')
+                        tkinter.messagebox.showerror("Error Message",'Results not found')
                         
                     else:  
                         try:
@@ -951,10 +951,10 @@ class etoxlab:
                     self.predictButton.configure(state='normal') # predict
                     #self.pb.stop()
                     self.removeBackgroundProcess()
-                    tkMessageBox.showerror("Error Message", msg)
+                    tkinter.messagebox.showerror("Error Message", msg)
 
                 elif msg.startswith ('LOCAL MODEL'):
-                    tkMessageBox.showinfo("Model progress", msg)
+                    tkinter.messagebox.showinfo("Model progress", msg)
 
                 elif msg.startswith ('PROCESS '):
                     self.processList.append(int(msg[8:]))
@@ -963,7 +963,7 @@ class etoxlab:
                     self.models.chargeData()
                     self.models.setFocus(msg[7:],'')
 
-            except Queue.Empty:
+            except queue.Empty:
                 pass
 
         self.master.after(500, self.periodicCall) # re-call after 500ms
@@ -972,7 +972,7 @@ class etoxlab:
 if __name__ == "__main__":
 
     def quitCallback():
-        if tkMessageBox.askokcancel("Quit", "Do you really wish to quit?"):
+        if tkinter.messagebox.askokcancel("Quit", "Do you really wish to quit?"):
             fcntl.lockf(fp, fcntl.LOCK_UN)
             root.destroy()
 

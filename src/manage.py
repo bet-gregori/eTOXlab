@@ -25,7 +25,7 @@ import sys
 import os
 import getopt
 import shutil
-import cPickle as pickle
+import pickle as pickle
 import tarfile
 
 from utils import sandVersion
@@ -174,8 +174,8 @@ def exposeVersion (endpoint, ver, pubver):
     if os.path.isfile (vdir+'/licensing-status.txt'):
         shutil.copy(vdir+'/licensing-status.txt',edir)
         
-        os.chmod(vdir+'/licensing-status.txt',0664)
-        os.chmod(edir+'/licensing-status.txt',0664)
+        os.chmod(vdir+'/licensing-status.txt',0o664)
+        os.chmod(edir+'/licensing-status.txt',0o664)
 
     return (True, 'version exposed OK')
 
@@ -398,42 +398,42 @@ def infoVersion (endpoint,ver,style,pubver):
     if style in 'long':
 
         if unk :
-            if ver == 0: print '*'
-            else       : print '%-4s'%ver
+            if ver == 0: print('*')
+            else       : print('%-4s'%ver)
 
             #print '  web service :', isWS
             
             if pubver > 0 :
-                print '  public vers :', pubver
+                print('  public vers :', pubver)
             else:
-                print '  public vers : none'
-            print '  no model info available'
+                print('  public vers : none')
+            print('  no model info available')
             return (True, 'OK')
             
         for i in infoID:
-            if 'version' in i: print i[1]
+            if 'version' in i: print(i[1])
         
         for i in infoID:
-            if not 'version' in i: print '  %-10s'%i[0],' : '+str(i[1])
+            if not 'version' in i: print('  %-10s'%i[0],' : '+str(i[1]))
 
         #print "  web service :", isWS
             
         if pubver > 0 :
-            print '  public vers :', pubver
+            print('  public vers :', pubver)
         else:
-            print '  public vers : none'
+            print('  public vers : none')
         
         for i in infoSeries:
-            print '  %-10s'%i[0],' : '+str(i[1])
+            print('  %-10s'%i[0],' : '+str(i[1]))
         for i in infoMD:
-            print '  %-10s'%i[0],' : '+str(i[1])
+            print('  %-10s'%i[0],' : '+str(i[1]))
         for i in infoModel:
-            print '  %-10s'%i[0],' : '+str(i[1])
+            print('  %-10s'%i[0],' : '+str(i[1]))
         for i in infoResult:
-            print '  %-10s'%i[0],' : '+str(i[1])
+            print('  %-10s'%i[0],' : '+str(i[1]))
         for i in infoNotes:
-            print '  %-10s'%i[0],' : '+str(i[1])
-        print
+            print('  %-10s'%i[0],' : '+str(i[1]))
+        print()
             
     elif style in 'short':
         iversion = 4*' ' 
@@ -454,9 +454,9 @@ def infoVersion (endpoint,ver,style,pubver):
 
         if unk :
             if ver == 0 :
-                print '*   ' + ws + 'no model info available'
+                print('*   ' + ws + 'no model info available')
             else:
-                print '%-4s'%ver + ws + 'no model info available'
+                print('%-4s'%ver + ws + 'no model info available')
             return (True, 'OK')
         
         for i in infoID:
@@ -516,10 +516,10 @@ def infoVersion (endpoint,ver,style,pubver):
                     
         #print '*'+str(iMCC)+'*'+str(iSSX)+'*'+str(ir2)+'*'
         if iSSX != '    ':      # PCA
-            print iversion+ws+'MD:'+iMD+'  mod:'+imod+'  mol:'+imol+'  SSX:'+iSSX+iconf
+            print(iversion+ws+'MD:'+iMD+'  mod:'+imod+'  mol:'+imol+'  SSX:'+iSSX+iconf)
             
         elif iMCC != '    ' :   # qualitative model / classifier
-            print iversion+ws+'MD:'+iMD+'  mod:'+imod+'  mol:'+imol+'  sen:'+isen+'  spe:'+ispe+'  MCC:'+iMCC+iconf
+            print(iversion+ws+'MD:'+iMD+'  mod:'+imod+'  mol:'+imol+'  sen:'+isen+'  spe:'+ispe+'  MCC:'+iMCC+iconf)
         elif ir2 != '    ':
             cache = iversion+ws+'MD:'+iMD+'  mod:'+imod+'  mol:'+imol+'  R2:'+ir2
             if iq2 != '    ':
@@ -527,9 +527,9 @@ def infoVersion (endpoint,ver,style,pubver):
             if isdep != '    ':
                 cache +='  SDEP:'+isdep
             cache+=iconf
-            print cache
+            print(cache)
         else :
-            print iversion+ws+'MD:'+iMD+'  mod:'+imod+'  mol:'+imol+'  R2:'+ir2+'  Q2:'+iq2+'  SDEP:'+isdep+iconf
+            print(iversion+ws+'MD:'+iMD+'  mod:'+imod+'  mol:'+imol+'  R2:'+ir2+'  Q2:'+iq2+'  SDEP:'+isdep+iconf)
 
     
     return (True,'OK')
@@ -581,8 +581,8 @@ def info (endpoint,ver,style):
 
         #print pubver
             
-        print 78*'-'
-        print iendpoint+' ['+tag+']'
+        print(78*'-')
+        print(iendpoint+' ['+tag+']')
         
         itemend = os.listdir(wkd+'/'+iendpoint)
         itemend.sort()
@@ -633,16 +633,16 @@ def get (endpoint, ver, piece):
 def usage ():
     """Prints in the screen the command syntax and argument"""
     
-    print 'manage  --publish|expose=[0(unexpose)|1|2|...]|new|kill|conf|remove|import|export|version|info=[short|long]|get=[model|series]] -e endpoint [-v 1|last] [-t tag]'
+    print('manage  --publish|expose=[0(unexpose)|1|2|...]|new|kill|conf|remove|import|export|version|info=[short|long]|get=[model|series]] -e endpoint [-v 1|last] [-t tag]')
     
 
 def printResult (result):
 
     if result[0]:
-        print result[1]
+        print(result[1])
         sys.exit(0)
     else:
-        print "\nERROR:", result[1]
+        print("\nERROR:", result[1])
         sys.exit(1)
 
 def main ():
@@ -706,7 +706,7 @@ def main ():
                 usage()
                 sys.exit(0)
             elif opt in '--version':
-                print 'version: '+VERSION
+                print('version: '+VERSION)
                 sys.exit(0)
 
     if not action:

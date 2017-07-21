@@ -32,7 +32,7 @@ def computeLogP (mol, logpLabel = ''):
     except:
         return (False, 'unable to open molfile')
     
-    mi = suppl.next()
+    mi = next(suppl)
 
     if mi is None:
         return (False, 'wrong input format')
